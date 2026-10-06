@@ -1,0 +1,516 @@
+/* ─────────────────────────────────────────────
+   A WORD FOUND YOU — Global Styles
+   Covenant Culture Branding
+   ───────────────────────────────────────────── */
+
+/* ── CSS Custom Properties (Design Tokens) ── */
+:root {
+  /* Brand */
+  --color-primary: #F26522;
+  --color-primary-hover: #DA5A1D;
+  --color-primary-active: #C44F18;
+  --color-green: #087A43;
+  --color-purple: #8B238C;
+  --color-yellow: #F4C51B;
+  --color-coral: #F15A5B;
+  --color-teal: #159B8D;
+
+  /* Neutrals */
+  --color-white: #FFFFFF;
+  --color-off-white: #FAFAF8;
+  --color-surface: #F5F4F0;
+  --color-text-primary: #151515;
+  --color-text-secondary: #555555;
+  --color-text-muted: #777777;
+  --color-border: #E7E5E0;
+
+  /* Functional */
+  --color-overlay: rgba(21, 21, 21, 0.45);
+  --color-card-shadow: rgba(21, 21, 21, 0.06);
+
+  /* Typography */
+  --font-family: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Radii */
+  --radius-button: 8px;
+  --radius-card: 12px;
+
+  /* Shadows */
+  --shadow-card: 0 2px 12px var(--color-card-shadow);
+  --shadow-card-hover: 0 4px 20px rgba(21, 21, 21, 0.10);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-medium: 0.3s ease;
+  --transition-slow: 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-dramatic: 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Reset & Base ─────────────────────────── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-family);
+  color: var(--color-text-primary);
+  background-color: var(--color-off-white);
+  line-height: 1.6;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* ── App Container ────────────────────────── */
+.app {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 24px 20px;
+  overflow: hidden;
+}
+
+/* ── Decorative Wave Background ───────────── */
+.wave-decoration {
+  position: fixed;
+  bottom: -60px;
+  left: -10%;
+  right: -10%;
+  width: 120%;
+  height: 320px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+}
+
+.wave-decoration--top {
+  bottom: auto;
+  top: -100px;
+  transform: rotate(180deg);
+  opacity: 0.18;
+}
+
+/* ── Screen Container ─────────────────────── */
+.screen {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  max-width: 440px;
+  flex: 1;
+}
+
+/* ── LANDING SCREEN ───────────────────────── */
+.landing {
+  animation: fadeSlideUp 0.8s var(--transition-dramatic) both;
+}
+
+.landing__eyebrow {
+  font-size: clamp(12px, 3vw, 14px);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: 8px;
+  opacity: 0;
+  animation: fadeIn 0.6s 0.3s ease both;
+}
+
+.landing__emoji {
+  font-size: clamp(48px, 12vw, 72px);
+  line-height: 1;
+  margin-bottom: 16px;
+  animation: subtlePulse 3s ease-in-out infinite;
+}
+
+.landing__headline {
+  font-size: clamp(32px, 8vw, 48px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--color-text-primary);
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.landing__subheadline {
+  font-size: clamp(18px, 4.5vw, 24px);
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+  margin-bottom: 40px;
+  max-width: 320px;
+}
+
+.landing__fine-print {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-top: 20px;
+  opacity: 0;
+  animation: fadeIn 0.6s 0.8s ease both;
+}
+
+/* ── DISCOVERING SCREEN ───────────────────── */
+.discovering {
+  animation: fadeIn 0.4s ease both;
+}
+
+.discovering__text {
+  font-size: clamp(18px, 4.5vw, 22px);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  animation: breathe 2s ease-in-out infinite;
+}
+
+.discovering__dots {
+  display: inline-flex;
+  gap: 6px;
+  margin-top: 24px;
+}
+
+.discovering__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  opacity: 0.3;
+  animation: dotPulse 1.4s ease-in-out infinite;
+}
+
+.discovering__dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.discovering__dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* ── WORD SCREEN ──────────────────────────── */
+.word-screen {
+  animation: fadeIn 0.3s ease both;
+  width: 100%;
+  padding-bottom: 32px;
+}
+
+.word-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 36px 28px 32px;
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  text-align: center;
+  opacity: 0;
+  animation: cardReveal 0.7s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.word-card__label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeIn 0.5s 0.4s ease both;
+}
+
+.word-card__title {
+  font-size: clamp(36px, 10vw, 56px);
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--color-text-primary);
+  letter-spacing: -0.03em;
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: titleReveal 0.6s 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.word-card__divider {
+  width: 48px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-coral));
+  border-radius: 2px;
+  margin: 0 auto 28px;
+  opacity: 0;
+  animation: fadeIn 0.5s 0.7s ease both;
+}
+
+.word-card__scripture {
+  font-size: clamp(15px, 3.8vw, 17px);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-bottom: 8px;
+  opacity: 0;
+  animation: fadeSlideUp 0.5s 0.8s ease both;
+}
+
+.word-card__reference {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--color-primary);
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeIn 0.4s 1s ease both;
+}
+
+.word-card__encouragement {
+  font-size: clamp(14px, 3.5vw, 15px);
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+  opacity: 0;
+  animation: fadeSlideUp 0.5s 1.1s ease both;
+}
+
+/* ── Word Screen Actions ──────────────────── */
+.word-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 28px;
+  width: 100%;
+  max-width: 440px;
+  opacity: 0;
+  animation: fadeSlideUp 0.5s 1.3s ease both;
+}
+
+/* ── Buttons ──────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-button);
+  padding: 16px 32px;
+  width: 100%;
+  max-width: 320px;
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+/* Primary CTA */
+.btn--primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  box-shadow: 0 4px 16px rgba(242, 101, 34, 0.3);
+}
+
+.btn--primary:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(242, 101, 34, 0.35);
+}
+
+.btn--primary:active {
+  background-color: var(--color-primary-active);
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(242, 101, 34, 0.2);
+}
+
+/* Secondary / Ghost */
+.btn--secondary {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.btn--secondary:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background-color: rgba(242, 101, 34, 0.04);
+}
+
+.btn--secondary:active {
+  background-color: rgba(242, 101, 34, 0.08);
+}
+
+/* Ghost link */
+.btn--ghost {
+  background: none;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 24px;
+}
+
+.btn--ghost:hover {
+  color: var(--color-primary);
+}
+
+/* ── Footer Branding ──────────────────────── */
+.footer-brand {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 16px 20px 8px;
+  opacity: 0;
+  animation: fadeIn 0.6s 1s ease both;
+}
+
+.footer-brand__text {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.footer-brand__name {
+  color: var(--color-primary);
+}
+
+/* ── Fallback Screen ──────────────────────── */
+.fallback {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.fallback__emoji {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.fallback__text {
+  font-size: 17px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Animations ───────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes titleReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+    letter-spacing: 0.08em;
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    letter-spacing: -0.03em;
+  }
+}
+
+@keyframes subtlePulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.06); }
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.5; }
+  50%      { opacity: 1; }
+}
+
+@keyframes dotPulse {
+  0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+  40%           { opacity: 1;   transform: scale(1.1); }
+}
+
+/* ── Reduced Motion ───────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Responsive — Tablet & Up ─────────────── */
+@media (min-width: 768px) {
+  .app {
+    padding: 48px 32px;
+  }
+
+  .word-card {
+    padding: 48px 40px 40px;
+  }
+
+  .word-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .btn {
+    width: auto;
+    min-width: 200px;
+  }
+}
