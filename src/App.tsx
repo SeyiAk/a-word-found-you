@@ -1,16 +1,21 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, startTransition, ViewTransition } from 'react';
 import type { AppState } from './types/word';
 import { useRandomWord } from './hooks/useRandomWord';
 import { LandingScreen } from './components/LandingScreen';
 import { DiscoveryScreen } from './components/DiscoveryScreen';
 import { WordScreen } from './components/WordScreen';
-import { WaveDecoration } from './components/WaveDecoration';
+import { BrandLogo } from './components/BrandLogo';
+import { AmbientBackground } from './components/AmbientBackground';
 
 /**
  * A WORD FOUND YOU
  *
  * Interactive Youth Sunday QR-code experience.
  * State machine: landing → discovering → word → (repeat)
+ *
+ * Screen changes run inside startTransition so React animates them with
+ * the View Transitions API (logo and found-reference morph between
+ * screens). Browsers without it simply swap screens.
  *
  * ────────────────────────────────────────────────
  * DEPLOYMENT NOTE:
@@ -20,53 +25,59 @@ import { WaveDecoration } from './components/WaveDecoration';
  * ────────────────────────────────────────────────
  */
 
-const DISCOVERY_DURATION_MS = 1800;
-
 export default function App() {
   const [appState, setAppState] = useState<AppState>('landing');
+  const [hasSeenWord, setHasSeenWord] = useState(false);
   const { currentWord, getRandomWord } = useRandomWord();
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Guards against double taps starting a second discovery mid-sequence
+  const discoveringRef = useRef(false);
 
   const startDiscovery = useCallback(() => {
-    setAppState('discovering');
+    if (discoveringRef.current) return;
+    discoveringRef.current = true;
 
-    // Clear any existing timer
-    if (timerRef.current) clearTimeout(timerRef.current);
-
-    // Select the word immediately, reveal after dramatic pause
-    getRandomWord();
-
-    timerRef.current = setTimeout(() => {
-      setAppState('word');
-    }, DISCOVERY_DURATION_MS);
+    // Select the word up front; the discovery sequence lands on it
+    startTransition(() => {
+      getRandomWord();
+      setAppState('discovering');
+    });
   }, [getRandomWord]);
 
-  const handleFindWord = useCallback(() => {
-    startDiscovery();
-  }, [startDiscovery]);
-
-  const handleAnotherWord = useCallback(() => {
-    startDiscovery();
-  }, [startDiscovery]);
+  const revealWord = useCallback(() => {
+    discoveringRef.current = false;
+    startTransition(() => {
+      setAppState('word');
+      setHasSeenWord(true);
+    });
+  }, []);
 
   return (
-    <div className="app">
-      {/* Decorative wave — top */}
-      <WaveDecoration className="wave-decoration--top" />
+    <div className={`app app--${appState}`}>
+      <AmbientBackground />
+
+      <BrandLogo variant={appState === 'landing' ? 'hero' : 'compact'} />
 
       {/* ── Screen Router ── */}
       {appState === 'landing' && (
-        <LandingScreen onFindWord={handleFindWord} />
+        <ViewTransition enter="screen-enter" exit="screen-exit">
+          <LandingScreen onFindWord={startDiscovery} />
+        </ViewTransition>
       )}
 
-      {appState === 'discovering' && <DiscoveryScreen />}
+      {appState === 'discovering' && currentWord && (
+        <ViewTransition enter="screen-enter" exit="screen-exit">
+          <DiscoveryScreen word={currentWord} isRepeat={hasSeenWord} onComplete={revealWord} />
+        </ViewTransition>
+      )}
 
       {appState === 'word' && currentWord && (
-        <WordScreen word={currentWord} onAnotherWord={handleAnotherWord} />
+        <ViewTransition enter="screen-enter" exit="screen-exit">
+          <WordScreen word={currentWord} onAnotherWord={startDiscovery} />
+        </ViewTransition>
       )}
 
       {/* Fallback if dataset is empty */}
-      {appState === 'word' && !currentWord && (
+      {appState !== 'landing' && !currentWord && (
         <div className="screen fallback" role="main">
           <p className="fallback__emoji">🙏</p>
           <p className="fallback__text">
@@ -75,17 +86,6 @@ export default function App() {
           </p>
         </div>
       )}
-
-      {/* Decorative wave — bottom */}
-      <WaveDecoration />
-
-      {/* Footer branding */}
-      <div className="footer-brand">
-        <p className="footer-brand__text">
-          {/* Youth Sunday ·  */}
-          <span className="footer-brand__name">The Covenant Culture</span>
-        </p>
-      </div>
     </div>
   );
 }
